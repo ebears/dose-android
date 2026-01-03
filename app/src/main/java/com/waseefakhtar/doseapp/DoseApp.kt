@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -76,7 +77,7 @@ fun DoseApp(
             val fabVisibility = rememberSaveable { (mutableStateOf(true)) }
 
             Scaffold(
-                modifier = Modifier.padding(16.dp, 0.dp),
+                modifier = Modifier.fillMaxSize(),
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 floatingActionButton = {
@@ -146,13 +147,12 @@ private fun DoseBottomBar(
 ) {
     // Wrap the navigation bar in a surface so the color behind the system
     // navigation is equal to the container color of the navigation bar.
-    Surface(color = MaterialTheme.colorScheme.surface) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.surface
+    ) {
         NavigationBar(
-            modifier = Modifier.windowInsetsPadding(
-                WindowInsets.safeDrawing.only(
-                    WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
-                )
-            ),
+            modifier = Modifier.fillMaxWidth(),
             tonalElevation = 0.dp
         ) {
 

@@ -43,7 +43,7 @@ fun MedicationCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         onClick = { navigateToMedicationDetail(medication) },
         shape = RoundedCornerShape(30.dp),
         colors = CardDefaults.cardColors(
@@ -62,7 +62,7 @@ fun MedicationCard(
                     text = medication.name,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color(boxColor)
+                    color = Color(textColor)
                 )
 
                 val doseAndType = "${medication.dosage} ${
@@ -80,7 +80,7 @@ fun MedicationCard(
 
                 Text(
                     text = doseAndType,
-                    color = Color(boxColor)
+                    color = Color(textColor)
                 )
             }
 
@@ -89,7 +89,7 @@ fun MedicationCard(
                     .height(64.dp)
                     .aspectRatio(1f)
                     .border(
-                        width = 1.5.dp, color = Color(boxColor), shape = RoundedCornerShape(16.dp)
+                        width = 1.5.dp, color = Color(textColor), shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -115,7 +115,7 @@ fun MedicationCard(
                         }
                     ),
                     modifier = Modifier.size(42.dp),
-                    tint = Color(boxColor)
+                    tint = Color(textColor)
                 )
             }
 

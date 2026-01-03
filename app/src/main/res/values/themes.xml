@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.DoseApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.DoseApp" parent="android:Theme.Material.NoActionBar">
+        <!-- Status bar configuration - will be controlled by Compose -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        
+        <!-- Navigation bar configuration -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

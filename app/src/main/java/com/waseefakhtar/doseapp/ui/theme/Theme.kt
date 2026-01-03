@@ -55,8 +55,16 @@ fun DoseAppTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            val window = (view.context as Activity).window
+            // Use surface color for status bar to ensure proper contrast
+            window.statusBarColor = colorScheme.surface.toArgb()
+            // Make navigation bar opaque with surface color to cover Android system navigation
+            window.navigationBarColor = colorScheme.surface.toArgb()
+            
+            // Configure window insets controller for proper icon colors
+            val insetsController = ViewCompat.getWindowInsetsController(window.decorView)
+            insetsController?.isAppearanceLightStatusBars = !darkTheme
+            insetsController?.isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

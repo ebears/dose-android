@@ -160,7 +160,7 @@ fun MedicationDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier.padding(vertical = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                 navigationIcon = {
                     FloatingActionButton(
                         onClick = {
@@ -190,7 +190,9 @@ fun MedicationDetailScreen(
             )
         },
         bottomBar = {
-            Column {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
                 SingleChoiceSegmentedButtonRow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -238,6 +240,7 @@ fun MedicationDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)
+                        .padding(bottom = 16.dp)
                         .height(56.dp),
                     onClick = {
                         viewModel.logEvent(AnalyticsEvents.MEDICATION_DETAIL_DONE_CLICKED)
@@ -257,24 +260,24 @@ fun MedicationDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.titleLarge,
-                text = medication.medicationTime.toFormattedDateString(),
-                color = Color(boxColor)
+                text = medication.medicationTime.toFormattedDateString()
             )
 
             Box(
                 modifier = Modifier
                     .padding(16.dp)
                     .size(120.dp)
-                    .border(
-                        width = 1.5.dp, color = Color(boxColor), shape = RoundedCornerShape(64.dp)
-                    ),
+                .border(
+                    width = 1.5.dp, color = MaterialTheme.colorScheme.outline, shape = RoundedCornerShape(64.dp)
+                ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -298,16 +301,14 @@ fun MedicationDetailScreen(
                             MedicationType.GEL -> R.string.gel
                         }
                     ),
-                    modifier = Modifier.size(64.dp),
-                    tint = Color(boxColor)
+                    modifier = Modifier.size(64.dp)
                 )
             }
 
             Text(
                 text = medication.name,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineLarge,
-                color = Color(boxColor)
+                style = MaterialTheme.typography.headlineLarge
             )
 
             val doseAndType = "${medication.dosage} ${
@@ -325,8 +326,7 @@ fun MedicationDetailScreen(
 
             Text(
                 text = doseAndType,
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color(boxColor)
+                style = MaterialTheme.typography.headlineSmall
             )
         }
     }

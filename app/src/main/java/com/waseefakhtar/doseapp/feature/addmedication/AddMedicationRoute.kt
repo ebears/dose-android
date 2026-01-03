@@ -129,8 +129,8 @@ fun AddMedicationScreen(
         topBar = {
             TopAppBar(
                 modifier =
-                Modifier
-                    .padding(vertical = 16.dp),
+                    Modifier
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                 navigationIcon = {
                     FloatingActionButton(
                         onClick = {
@@ -158,9 +158,10 @@ fun AddMedicationScreen(
         bottomBar = {
             Button(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
+                        .padding(bottom = 16.dp)
                     .height(56.dp),
                 onClick = {
                     validateMedication(
@@ -207,6 +208,7 @@ fun AddMedicationScreen(
             modifier =
             Modifier
                 .padding(innerPadding)
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -548,7 +550,7 @@ private fun MedicationTypeBox(
             )
             .border(
                 width = 1.dp,
-                color = if (isSelected) MaterialTheme.colorScheme.primary
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(12.dp)
             )
@@ -573,7 +575,7 @@ private fun MedicationTypeBox(
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
-                tint = if (isSelected) MaterialTheme.colorScheme.primary
+                tint = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurface
             )
 
@@ -592,7 +594,7 @@ private fun MedicationTypeBox(
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
-                color = if (isSelected) MaterialTheme.colorScheme.primary
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurface
             )
         }

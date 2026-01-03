@@ -181,7 +181,7 @@ fun DailyOverviewCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .height(156.dp),
         shape = RoundedCornerShape(36.dp),
         colors = cardColors(
@@ -244,6 +244,7 @@ fun EmptyCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
             .height(156.dp),
         shape = RoundedCornerShape(36.dp),
         colors = cardColors(
@@ -353,7 +354,7 @@ fun DatesHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         DateHeader(
             data = calendarModel,
