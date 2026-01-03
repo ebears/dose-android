@@ -89,34 +89,45 @@ fun MedicationCard(
                     .height(64.dp)
                     .aspectRatio(1f)
                     .border(
-                        width = 1.5.dp, color = Color(textColor), shape = RoundedCornerShape(16.dp)
+                        width = 1.5.dp, 
+                        color = if (medication.medicationTaken) Color(0xFF4CAF50) else Color(textColor), 
+                        shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = painterResource(
-                        when (medication.type) {
-                            MedicationType.TABLET -> R.drawable.ic_tablet
-                            MedicationType.CAPSULE -> R.drawable.ic_capsule
-                            MedicationType.SYRUP -> R.drawable.ic_syrup
-                            MedicationType.DROPS -> R.drawable.ic_drops
-                            MedicationType.SPRAY -> R.drawable.ic_spray
-                            MedicationType.GEL -> R.drawable.ic_gel
-                        }
-                    ),
-                    contentDescription = stringResource(
-                        when (medication.type) {
-                            MedicationType.TABLET -> R.string.tablet
-                            MedicationType.CAPSULE -> R.string.capsule
-                            MedicationType.SYRUP -> R.string.type_syrup
-                            MedicationType.DROPS -> R.string.drops
-                            MedicationType.SPRAY -> R.string.spray
-                            MedicationType.GEL -> R.string.gel
-                        }
-                    ),
-                    modifier = Modifier.size(42.dp),
-                    tint = Color(textColor)
-                )
+                if (medication.medicationTaken) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_check),
+                        contentDescription = stringResource(R.string.medication_taken),
+                        modifier = Modifier.size(42.dp),
+                        tint = Color(0xFF4CAF50)
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(
+                            when (medication.type) {
+                                MedicationType.TABLET -> R.drawable.ic_tablet
+                                MedicationType.CAPSULE -> R.drawable.ic_capsule
+                                MedicationType.SYRUP -> R.drawable.ic_syrup
+                                MedicationType.DROPS -> R.drawable.ic_drops
+                                MedicationType.SPRAY -> R.drawable.ic_spray
+                                MedicationType.GEL -> R.drawable.ic_gel
+                            }
+                        ),
+                        contentDescription = stringResource(
+                            when (medication.type) {
+                                MedicationType.TABLET -> R.string.tablet
+                                MedicationType.CAPSULE -> R.string.capsule
+                                MedicationType.SYRUP -> R.string.type_syrup
+                                MedicationType.DROPS -> R.string.drops
+                                MedicationType.SPRAY -> R.string.spray
+                                MedicationType.GEL -> R.string.gel
+                            }
+                        ),
+                        modifier = Modifier.size(42.dp),
+                        tint = Color(textColor)
+                    )
+                }
             }
 
             if (onDeleteClick != null) {
