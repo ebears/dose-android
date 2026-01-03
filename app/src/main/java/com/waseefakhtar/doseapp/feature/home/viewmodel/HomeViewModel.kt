@@ -7,6 +7,7 @@ import com.waseefakhtar.doseapp.analytics.AnalyticsHelper
 import com.waseefakhtar.doseapp.domain.model.Medication
 import com.waseefakhtar.doseapp.extension.toFormattedYearMonthDateString
 import com.waseefakhtar.doseapp.feature.home.model.CalendarModel
+import com.waseefakhtar.doseapp.feature.home.usecase.DeleteMedicationUseCase
 import com.waseefakhtar.doseapp.feature.home.usecase.GetMedicationsUseCase
 import com.waseefakhtar.doseapp.feature.home.usecase.UpdateMedicationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getMedicationsUseCase: GetMedicationsUseCase,
     private val updateMedicationUseCase: UpdateMedicationUseCase,
+    private val deleteMedicationUseCase: DeleteMedicationUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
@@ -88,6 +90,12 @@ class HomeViewModel @Inject constructor(
     fun takeMedication(medication: Medication) {
         viewModelScope.launch {
             updateMedicationUseCase.updateMedication(medication)
+        }
+    }
+
+    fun deleteMedication(medication: Medication) {
+        viewModelScope.launch {
+            deleteMedicationUseCase.deleteMedication(medication)
         }
     }
 

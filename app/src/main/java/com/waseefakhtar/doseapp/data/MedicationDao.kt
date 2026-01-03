@@ -41,4 +41,22 @@ interface MedicationDao {
 
     @Query("SELECT * FROM medicationentity WHERE id = :id")
     suspend fun getMedicationById(id: Long): MedicationEntity?
+
+    @Query(
+        """
+        DELETE FROM medicationentity
+        WHERE name = :name
+          AND dosage = :dosage
+          AND type = :type
+          AND startDate = :startDate
+          AND medicationTime >= :currentDate
+        """
+    )
+    suspend fun deleteFutureMedicationDoses(
+        name: String,
+        dosage: Int,
+        type: String,
+        startDate: Long,
+        currentDate: Long
+    ): Int
 }

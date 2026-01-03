@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +35,8 @@ import java.util.Date
 @Composable
 fun MedicationCard(
     medication: Medication,
-    navigateToMedicationDetail: (Medication) -> Unit
+    navigateToMedicationDetail: (Medication) -> Unit,
+    onDeleteClick: ((Medication) -> Unit)?
 ) {
     val (cardColor, boxColor, textColor) = medication.type.getCardColor()
 
@@ -114,6 +118,18 @@ fun MedicationCard(
                     tint = Color(boxColor)
                 )
             }
+
+            if (onDeleteClick != null) {
+                IconButton(
+                    onClick = { onDeleteClick(medication) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         }
     }
 }
@@ -122,7 +138,7 @@ fun MedicationCard(
 @Composable
 private fun MedicationCardTakeNowPreview() {
     MedicationCard(
-        Medication(
+        medication = Medication(
             id = 123L,
             name = "A big big name for a little medication I needs to take",
             dosage = 1,
@@ -131,15 +147,17 @@ private fun MedicationCardTakeNowPreview() {
             endDate = Date(),
             medicationTime = Date(),
             medicationTaken = false
-        )
-    ) { }
+        ),
+        navigateToMedicationDetail = {},
+        onDeleteClick = null
+    )
 }
 
 @Preview
 @Composable
 private fun MedicationCardTakenPreview() {
     MedicationCard(
-        Medication(
+        medication = Medication(
             id = 123L,
             name = "A big big name for a little medication I needs to take",
             dosage = 1,
@@ -149,6 +167,8 @@ private fun MedicationCardTakenPreview() {
             medicationTime = Date(),
             medicationTaken = true,
             type = MedicationType.TABLET
-        )
-    ) { }
+        ),
+        navigateToMedicationDetail = {},
+        onDeleteClick = null
+    )
 }

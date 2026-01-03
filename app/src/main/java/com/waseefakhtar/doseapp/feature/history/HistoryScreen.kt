@@ -116,7 +116,8 @@ fun MedicationLazyColumn(sortedMedicationList: List<MedicationListItem>, navigat
                             medication = it.medication,
                             navigateToMedicationDetail = { medication ->
                                 navigateToMedicationDetail(medication)
-                            }
+                            },
+                            onDeleteClick = null
                         )
                     }
                 }

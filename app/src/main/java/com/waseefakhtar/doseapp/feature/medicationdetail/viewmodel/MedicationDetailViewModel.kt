@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.waseefakhtar.doseapp.analytics.AnalyticsHelper
 import com.waseefakhtar.doseapp.domain.model.Medication
+import com.waseefakhtar.doseapp.feature.home.usecase.DeleteMedicationUseCase
 import com.waseefakhtar.doseapp.feature.home.usecase.UpdateMedicationUseCase
 import com.waseefakhtar.doseapp.feature.medicationdetail.usecase.GetMedicationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class MedicationDetailViewModel @Inject constructor(
     private val getMedicationUseCase: GetMedicationUseCase,
     private val updateMedicationUseCase: UpdateMedicationUseCase,
+    private val deleteMedicationUseCase: DeleteMedicationUseCase,
     private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
     private val _medication = MutableStateFlow<Medication?>(null)
@@ -30,6 +32,12 @@ class MedicationDetailViewModel @Inject constructor(
     fun updateMedication(medication: Medication, isMedicationTaken: Boolean) {
         viewModelScope.launch {
             updateMedicationUseCase.updateMedication(medication.copy(medicationTaken = isMedicationTaken))
+        }
+    }
+
+    fun deleteMedication(medication: Medication) {
+        viewModelScope.launch {
+            deleteMedicationUseCase.deleteMedication(medication)
         }
     }
 

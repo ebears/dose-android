@@ -98,4 +98,9 @@
     <string name="drops" tools:ignore="MissingTranslation">Drops</string>
     <string name="spray" tools:ignore="MissingTranslation">Spray</string>
     <string name="gel" tools:ignore="MissingTranslation">Gel</string>
+    <string name="delete">Delete</string>
+    <string name="delete_medication">Delete Medication</string>
+    <string name="delete_medication_confirmation">Are you sure you want to delete %s? This action cannot be undone.</string>
+    <string name="delete_medication_future">Delete %s? This will remove this medication and all upcoming reminders. This action cannot be undone.</string>
+    <string name="delete_medication_past">Delete %s? This will remove this medication from your history. This action cannot be undone.</string>
 </resources>

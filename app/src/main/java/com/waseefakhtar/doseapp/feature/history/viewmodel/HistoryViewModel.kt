@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.waseefakhtar.doseapp.analytics.AnalyticsHelper
+import com.waseefakhtar.doseapp.domain.model.Medication
+import com.waseefakhtar.doseapp.feature.home.usecase.DeleteMedicationUseCase
 import com.waseefakhtar.doseapp.feature.home.usecase.GetMedicationsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -14,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val getMedicationsUseCase: GetMedicationsUseCase
+    private val getMedicationsUseCase: GetMedicationsUseCase,
+    private val deleteMedicationUseCase: DeleteMedicationUseCase,
+    private val analyticsHelper: AnalyticsHelper
 ) : ViewModel() {
 
     var state by mutableStateOf(HistoryState())
@@ -32,5 +37,15 @@ class HistoryViewModel @Inject constructor(
                 )
             }.launchIn(viewModelScope)
         }
+    }
+
+    fun deleteMedication(medication: Medication) {
+        viewModelScope.launch {
+            deleteMedicationUseCase.deleteMedication(medication)
+        }
+    }
+
+    fun logEvent(eventName: String) {
+        analyticsHelper.logEvent(eventName = eventName)
     }
 }

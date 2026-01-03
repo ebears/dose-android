@@ -27,6 +27,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults.cardColors
+import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -75,6 +76,9 @@ fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var medicationToDelete by remember { mutableStateOf<Medication?>(null) }
+
     val state by viewModel.homeUiState.collectAsState()
     PermissionAlarmDialog(
         askAlarmPermission = askAlarmPermission,
@@ -92,7 +96,31 @@ fun HomeRoute(
         onDateSelected = viewModel::selectDate,
         onSelectedDate = { viewModel.updateSelectedDate(it) },
         logEvent = viewModel::logEvent,
+        onDeleteMedication = { medication ->
+            medicationToDelete = medication
+            showDeleteDialog = true
+        }
     )
+
+    if (showDeleteDialog && medicationToDelete != null) {
+        val isFutureMedication = medicationToDelete!!.medicationTime.after(Date())
+        
+        DeleteConfirmationDialog(
+            medicationName = medicationToDelete!!.name,
+            isFutureMedication = isFutureMedication,
+            onConfirm = {
+                viewModel.deleteMedication(medicationToDelete!!)
+                viewModel.logEvent(AnalyticsEvents.MEDICATION_DELETED)
+                showDeleteDialog = false
+                medicationToDelete = null
+            },
+            onDismiss = {
+                showDeleteDialog = false
+                medicationToDelete = null
+                viewModel.logEvent(AnalyticsEvents.MEDICATION_DELETE_CANCELLED)
+            }
+        )
+    }
 }
 
 @Composable
@@ -103,7 +131,8 @@ fun HomeScreen(
     navigateToMedicationDetail: (Medication) -> Unit,
     onDateSelected: (CalendarModel.DateModel) -> Unit,
     onSelectedDate: (Date) -> Unit,
-    logEvent: (String) -> Unit
+    logEvent: (String) -> Unit,
+    onDeleteMedication: (Medication) -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -118,6 +147,7 @@ fun HomeScreen(
             logEvent = {
                 logEvent.invoke(it)
             },
+            onDeleteMedication = onDeleteMedication
         )
     }
 }
@@ -266,7 +296,8 @@ fun DailyMedications(
     navigateToMedicationDetail: (Medication) -> Unit,
     onSelectedDate: (Date) -> Unit,
     onDateSelected: (CalendarModel.DateModel) -> Unit,
-    logEvent: (String) -> Unit
+    logEvent: (String) -> Unit,
+    onDeleteMedication: (Medication) -> Unit
 ) {
 
     DatesHeader(
@@ -298,7 +329,8 @@ fun DailyMedications(
                         medication = it,
                         navigateToMedicationDetail = { medication ->
                             navigateToMedicationDetail(medication)
-                        }
+                        },
+                        onDeleteClick = onDeleteMedication
                     )
                 }
             )
@@ -534,6 +566,55 @@ fun PermissionDialog(
             }
         }
     }
+}
+
+@Composable
+fun DeleteConfirmationDialog(
+    medicationName: String,
+    isFutureMedication: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = null
+            )
+        },
+        title = {
+            Text(text = stringResource(R.string.delete_medication))
+        },
+        text = {
+            Text(
+                text = stringResource(
+                    if (isFutureMedication) {
+                        R.string.delete_medication_future
+                    } else {
+                        R.string.delete_medication_past
+                    },
+                    medicationName
+                )
+            )
+        },
+        onDismissRequest = {
+            onDismiss()
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm
+            ) {
+                Text(stringResource(R.string.delete))
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)

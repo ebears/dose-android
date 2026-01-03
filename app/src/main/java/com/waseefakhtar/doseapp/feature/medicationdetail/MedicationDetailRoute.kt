@@ -12,11 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
@@ -49,12 +53,54 @@ import com.waseefakhtar.doseapp.util.MedicationType
 import com.waseefakhtar.doseapp.util.SnackbarUtil.Companion.showSnackbar
 
 @Composable
+fun DeleteConfirmationDialog(
+    medicationName: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = null
+            )
+        },
+        title = {
+            Text(text = stringResource(R.string.delete_medication))
+        },
+        text = {
+            Text(
+                text = stringResource(R.string.delete_medication_confirmation, medicationName)
+            )
+        },
+        onDismissRequest = {
+            onDismiss()
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm
+            ) {
+                Text(stringResource(R.string.delete))
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
 fun MedicationDetailRoute(
     medicationId: Long?,
     onBackClicked: () -> Unit,
     viewModel: MedicationDetailViewModel = hiltViewModel()
 ) {
     val medication by viewModel.medication.collectAsState()
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         medicationId?.let {
@@ -63,10 +109,27 @@ fun MedicationDetailRoute(
     }
 
     medication?.let {
+        if (showDeleteDialog) {
+            DeleteConfirmationDialog(
+                medicationName = it.name,
+                onConfirm = {
+                    viewModel.deleteMedication(it)
+                    viewModel.logEvent(AnalyticsEvents.MEDICATION_DELETED)
+                    showDeleteDialog = false
+                    onBackClicked()
+                },
+                onDismiss = {
+                    showDeleteDialog = false
+                    viewModel.logEvent(AnalyticsEvents.MEDICATION_DELETE_CANCELLED)
+                }
+            )
+        }
+
         MedicationDetailScreen(
             medication = it,
             viewModel = viewModel,
-            onBackClicked = onBackClicked
+            onBackClicked = onBackClicked,
+            onDeleteClick = { showDeleteDialog = true }
         )
     }
 }
@@ -76,7 +139,8 @@ fun MedicationDetailRoute(
 fun MedicationDetailScreen(
     medication: Medication,
     viewModel: MedicationDetailViewModel,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     val (cardColor, boxColor, textColor) = medication.type.getCardColor()
     var isTakenTapped by remember(medication.medicationTaken) {
@@ -108,6 +172,17 @@ fun MedicationDetailScreen(
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = onDeleteClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.delete),
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                 },

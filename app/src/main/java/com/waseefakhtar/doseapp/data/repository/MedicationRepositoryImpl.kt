@@ -28,6 +28,17 @@ class MedicationRepositoryImpl(
         dao.deleteMedication(medication.toMedicationEntity())
     }
 
+    override suspend fun deleteFutureMedicationDoses(medication: Medication): Int {
+        val currentDate = System.currentTimeMillis()
+        return dao.deleteFutureMedicationDoses(
+            name = medication.name,
+            dosage = medication.dosage,
+            type = medication.type.name,
+            startDate = medication.startDate.time,
+            currentDate = currentDate
+        )
+    }
+
     override suspend fun updateMedication(medication: Medication) {
         dao.updateMedication(medication.toMedicationEntity())
     }
