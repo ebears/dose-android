@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +40,15 @@ fun MedicationCard(
     onDeleteClick: ((Medication) -> Unit)?
 ) {
     val (cardColor, boxColor, textColor) = medication.type.getCardColor()
+    
+    // Choose green color based on card background luminance for optimal contrast
+    val checkmarkColor = if (Color(cardColor).luminance() > 0.5f) {
+        // Light background: use dark green
+        Color(0xFF1B5E20)
+    } else {
+        // Dark background: use light green
+        Color(0xFF4CAF50)
+    }
 
     Card(
         modifier = Modifier
@@ -90,7 +100,7 @@ fun MedicationCard(
                     .aspectRatio(1f)
                     .border(
                         width = 1.5.dp, 
-                        color = if (medication.medicationTaken) Color(0xFF4CAF50) else Color(textColor), 
+                        color = if (medication.medicationTaken) checkmarkColor else Color(textColor), 
                         shape = RoundedCornerShape(16.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -100,7 +110,7 @@ fun MedicationCard(
                         painter = painterResource(R.drawable.ic_check),
                         contentDescription = stringResource(R.string.medication_taken),
                         modifier = Modifier.size(42.dp),
-                        tint = Color(0xFF4CAF50)
+                        tint = checkmarkColor
                     )
                 } else {
                     Icon(
