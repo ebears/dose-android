@@ -105,7 +105,7 @@ fun AddMedicationScreen(
     var medicationName by rememberSaveable { mutableStateOf("") }
     var numberOfDosage by rememberSaveable { mutableStateOf("") }
     var frequency by rememberSaveable { mutableStateOf(Frequency.EVERYDAY.name) }
-    var startDate by rememberSaveable { mutableLongStateOf(0L) }
+    var startDate by rememberSaveable { mutableLongStateOf(Calendar.getInstance().timeInMillis) }
     var endDate by rememberSaveable { mutableLongStateOf(0L) }
     var showDatePicker by remember { mutableStateOf(false) }
     val selectedTimes =
@@ -374,12 +374,13 @@ private fun validateMedication(
         return
     }
 
-    if (startDate == 0L || endDate == 0L) {
+    if (startDate == 0L) {
         onInvalidate(R.string.duration)
         return
     }
 
-    if (startDate >= endDate) {
+    // If endDate is set, validate that it's after startDate
+    if (endDate != 0L && startDate >= endDate) {
         onInvalidate(R.string.duration)
         return
     }
@@ -389,13 +390,16 @@ private fun validateMedication(
         return
     }
 
+    // Convert 0L to null for lifetime medications
+    val endDateValue = if (endDate == 0L) null else Date(endDate)
+
     val medications =
         viewModel.createMedications(
             name = name,
             dosage = dosage,
             frequency = frequency,
             startDate = Date(startDate),
-            endDate = Date(endDate),
+            endDate = endDateValue,
             medicationTimes = selectedTimes,
             type = type
         )
@@ -520,8 +524,10 @@ private fun buildDateRangeText(
     startDate: Long,
     endDate: Long,
 ): String =
-    if (startDate == 0L || endDate == 0L) {
+    if (startDate == 0L) {
         ""
+    } else if (endDate == 0L) {
+        stringResource(R.string.lifetime)
     } else {
         "${Date(startDate).toFormattedMonthDateString()} - ${Date(endDate).toFormattedMonthDateString()}"
     }

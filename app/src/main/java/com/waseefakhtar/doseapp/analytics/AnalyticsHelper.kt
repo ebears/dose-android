@@ -18,18 +18,20 @@ class AnalyticsHelper(
     private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     fun trackNotificationShown(medication: Medication) {
+        val endDateValue = medication.endDate?.toFormattedDateString() ?: "lifetime"
         val params = bundleOf(
             MEDICATION_TIME to medication.medicationTime.toFormattedDateString(),
-            MEDICATION_END_DATE to medication.endDate.toFormattedDateString(),
+            MEDICATION_END_DATE to endDateValue,
             NOTIFICATION_TIME to Date().toFormattedDateString()
         )
         logEvent(AnalyticsEvents.MEDICATION_NOTIFICATION_SHOWN, params)
     }
 
     fun trackNotificationScheduled(medication: Medication) {
+        val endDateValue = medication.endDate?.toFormattedDateString() ?: "lifetime"
         val params = bundleOf(
             MEDICATION_TIME to medication.medicationTime.toFormattedDateString(),
-            MEDICATION_END_DATE to medication.endDate.toFormattedDateString(),
+            MEDICATION_END_DATE to endDateValue,
             NOTIFICATION_TIME to Date().toFormattedDateString()
         )
         logEvent(AnalyticsEvents.MEDICATION_NOTIFICATION_SCHEDULED, params)

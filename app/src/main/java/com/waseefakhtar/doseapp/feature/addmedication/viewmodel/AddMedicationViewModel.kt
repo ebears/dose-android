@@ -24,7 +24,7 @@ class AddMedicationViewModel @Inject constructor(
         dosage: Int,
         frequency: String,
         startDate: Date,
-        endDate: Date,
+        endDate: Date?,
         medicationTimes: List<CalendarInformation>,
         type: MedicationType,
     ): List<Medication> {
@@ -36,7 +36,14 @@ class AddMedicationViewModel @Inject constructor(
         }
 
         val oneDayInMillis = 86400 * 1000 // Number of milliseconds in one day
-        val durationInDays = ((endDate.time + oneDayInMillis - startDate.time) / oneDayInMillis).toInt()
+        
+        // For lifetime medications (endDate is null), create medications for 1 year
+        // This provides a reasonable default and allows users to manage their medications
+        val durationInDays = if (endDate == null) {
+            365 // Create medications for 1 year for lifetime medications
+        } else {
+            ((endDate.time + oneDayInMillis - startDate.time) / oneDayInMillis).toInt()
+        }
 
         // Always create at least one occurrence if we have a valid duration
         val numOccurrences = if (durationInDays > 0) maxOf(1, durationInDays / interval) else 0

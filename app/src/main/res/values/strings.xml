@@ -103,4 +103,6 @@
     <string name="delete_medication_confirmation">Are you sure you want to delete %s? This action cannot be undone.</string>
     <string name="delete_medication_future">Delete %s? This will remove this medication and all upcoming reminders. This action cannot be undone.</string>
     <string name="delete_medication_past">Delete %s? This will remove this medication from your history. This action cannot be undone.</string>
+    <string name="lifetime" tools:ignore="MissingTranslation">Lifetime</string>
+    <string name="no_end_date" tools:ignore="MissingTranslation">No end date</string>
 </resources>

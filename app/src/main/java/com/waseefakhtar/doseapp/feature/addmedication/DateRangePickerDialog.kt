@@ -56,14 +56,11 @@ fun DateRangePickerDialog(
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(
-                    enabled =
-                    dateRangePickerState.selectedStartDateMillis != null &&
-                        dateRangePickerState.selectedEndDateMillis != null,
+                    enabled = dateRangePickerState.selectedStartDateMillis != null,
                     onClick = {
                         dateRangePickerState.selectedStartDateMillis?.let { start ->
-                            dateRangePickerState.selectedEndDateMillis?.let { end ->
-                                onDateSelected(start, end)
-                            }
+                            val end = dateRangePickerState.selectedEndDateMillis ?: 0L
+                            onDateSelected(start, end)
                         }
                         onDismiss()
                     },
@@ -92,6 +89,22 @@ fun DateRangePickerDialog(
                 },
                 headline = {
                     if (
+                        dateRangePickerState.selectedStartDateMillis != null &&
+                        dateRangePickerState.selectedEndDateMillis == null
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_end_date),
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier =
+                            Modifier
+                                .padding(
+                                    start = 24.dp,
+                                    end = 12.dp,
+                                    bottom = 12.dp,
+                                ).fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    } else if (
                         dateRangePickerState.selectedStartDateMillis != null &&
                         dateRangePickerState.selectedEndDateMillis != null
                     ) {

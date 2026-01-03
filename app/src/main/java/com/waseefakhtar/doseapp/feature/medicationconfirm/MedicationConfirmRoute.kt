@@ -108,6 +108,7 @@ fun MedicationConfirmScreen(
         )
 
         val medication = medications.first()
+        val endDateText = medication.endDate?.toFormattedDateString() ?: stringResource(R.string.lifetime)
         Text(
             text = pluralStringResource(
                 id = R.plurals.all_set,
@@ -115,7 +116,7 @@ fun MedicationConfirmScreen(
                 medication.name,
                 medications.size,
                 medication.frequency.lowercase(),
-                medication.endDate.toFormattedDateString()
+                endDateText
             ),
             style = MaterialTheme.typography.titleMedium
         )
