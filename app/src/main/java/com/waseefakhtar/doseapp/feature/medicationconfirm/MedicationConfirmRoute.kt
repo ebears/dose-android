@@ -80,7 +80,7 @@ fun MedicationConfirmScreen(
     }
 
     Column(
-        modifier = Modifier.padding(0.dp, 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FloatingActionButton(
@@ -98,7 +98,9 @@ fun MedicationConfirmScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -124,7 +126,8 @@ fun MedicationConfirmScreen(
 
     Column(
         modifier = Modifier
-            .padding(0.dp, 16.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .padding(vertical = 16.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
     ) {

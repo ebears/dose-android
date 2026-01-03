@@ -121,6 +121,7 @@ fun MedicationCard(
 
             if (onDeleteClick != null) {
                 IconButton(
+                    modifier = Modifier.padding(start = 8.dp),
                     onClick = { onDeleteClick(medication) }
                 ) {
                     Icon(
